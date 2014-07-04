@@ -5,7 +5,8 @@ module AirplaneSeating
     attr_accessor :priority
 
     AISLE = 1
-    MIDDLE = 2
+    WINDOW = 2
+    MIDDLE = 3
 
   end
 end
