@@ -3,9 +3,11 @@ require 'airplane_seating/plane'
 
 describe AirplaneSeating::Plane do
 
+  let(:plane) { AirplaneSeating::Plane.new([[3, 2], [4, 3], [2, 3], [3, 4]]) }
+
   describe '#passengers' do
     pending 'functional test' do
-      subject { AirplaneSeating::Plane.new([[3, 2], [4, 3], [2, 3], [3, 4]]).passengers }
+      subject { plane.passengers(30) }
       it { should eq(<<-EOS
 19 25  1  2 26 27  3  4  5  6 28 20
 21 29  7  8 30     9 10 11 12    22

@@ -3,7 +3,7 @@ require 'airplane_seating/bucket'
 
 describe AirplaneSeating::Bucket do
 
-  subject(:bucket) { AirplaneSeating::Bucket.new(2, 3) }
+  subject(:bucket) { AirplaneSeating::Bucket.new(row: 2, col: 3) }
 
   describe '#initialize' do
     it 'should set default priorities' do
