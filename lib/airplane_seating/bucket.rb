@@ -7,13 +7,10 @@ module AirplaneSeating
     LEFT = 0
     RIGHT = -1
 
-    attr_accessor :row, :col
+    attr_accessor :seats
 
-    def initialize(options = {})
-      @index = options[:index]
-      @row = options[:row]
-      @col = options[:col]
-      @seats = AirplaneSeating::Util::Matrix.new(options[:row], options[:col]) { Seat.new }
+    def initialize(row, col)
+      @seats = AirplaneSeating::Util::Matrix.new(row, col) { Seat.new }
       set_default_priorities
     end
 

@@ -1,38 +1,36 @@
+require 'airplane_seating/util/matrix'
 require 'airplane_seating/bucket'
 
 module AirplaneSeating
   class Plane
 
-    attr_accessor :seats
-
     def initialize(plane_seats)
-      @buckets = plane_seats.each_with_index.map do |bucket, index|
-        Bucket.new(row: bucket[1], col: bucket[0], index: index)
+      @seats = create_buckets(plane_seats).reduce(Util::Matrix.new(0, 0)) do |meta, bucket|
+        meta + bucket.seats
       end
-      merge_buckets
+    end
+
+    def create_buckets(plane_seats)
+      buckets = plane_seats.map { |bucket| Bucket.new(bucket[1], bucket[0]) }
+      buckets.first.set_left_window_priority
+      buckets.last.set_right_window_priority
+      buckets
     end
 
     def passengers(persons)
-      set_buckets_window_priorities
+      seat_queue = merge_queues
+
+      persons.times do |person|
+        seat = seat_queue.pop
+        seat.set_passager(person)
+      end
+
+      print_seats
     end
 
     def seat(row, col)
       @seats[row, col]
     end
 
-    private
-
-    def max_row
-      @buckets.max_by { |bucket| bucket.row }.row
-    end
-
-    def columns
-      @buckets.reduce(0) { |meta, bucket| meta += bucket.col }
-    end
-
-    def set_buckets_window_priorities
-      @buckets.first.set_left_window_priority
-      @buckets.last.set_right_window_priority
-    end
   end
 end
