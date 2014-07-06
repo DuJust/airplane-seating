@@ -10,8 +10,13 @@ module AirplaneSeating
     attr_accessor :seats
 
     def initialize(row, col)
-      @seats = AirplaneSeating::Util::Matrix.new(row, col) { Seat.new }
+      @seats = AirplaneSeating::Util::Matrix.new(row_size: row, col_size: col) { Seat.new }
       set_default_priorities
+    end
+
+    def +(other)
+      @seats = @seats + other.seats
+      self
     end
 
     def seat(row, col)

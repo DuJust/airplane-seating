@@ -5,10 +5,10 @@ module AirplaneSeating
       attr_accessor :matrix
       attr_reader :row_size, :col_size
 
-      def initialize(row, col, &block)
-        @row_size = row
-        @col_size = col
-        @matrix = Array.new(row) { Array.new(col, &block) }
+      def initialize(options = {}, &block)
+        @row_size = options[:row_size]
+        @col_size = options[:col_size]
+        @matrix = options[:matrix] || Array.new(row_size) { Array.new(col_size, &block) }
       end
 
       def [](row, col)
@@ -17,6 +17,7 @@ module AirplaneSeating
       end
 
       def +(other)
+        return self.class.new(row_size: other.row_size, col_size: col_size, matrix: other.matrix) if @row_size == 0
         other.rows.each_with_index do |row, index|
           @matrix[index] = @matrix[index] + row if @row_size > index
           @matrix << create_row(other, index) if @row_size <= index

@@ -3,7 +3,7 @@ require 'airplane_seating/util/matrix'
 
 describe AirplaneSeating::Util::Matrix do
 
-  subject(:matrix) { AirplaneSeating::Util::Matrix.new(2, 3) { 1 } }
+  subject(:matrix) { AirplaneSeating::Util::Matrix.new(row_size: 2, col_size: 3) { 1 } }
 
   describe '#initialize' do
     it 'should init matrix' do
@@ -23,25 +23,43 @@ describe AirplaneSeating::Util::Matrix do
   end
 
   describe '#+' do
-    let(:other) { AirplaneSeating::Util::Matrix.new(3, 2) { 2 } }
-    subject { matrix + other }
 
-    it 'should retain origin matrix' do
-      expect(subject[0, 0]).to eq(1)
-      expect(subject[0, 1]).to eq(1)
-      expect(subject[0, 2]).to eq(1)
-      expect(subject[1, 0]).to eq(1)
-      expect(subject[1, 1]).to eq(1)
-      expect(subject[1, 2]).to eq(1)
+    let(:other_matrix) { AirplaneSeating::Util::Matrix.new(row_size: 3, col_size: 2) { 2 } }
+
+    context 'normal matrix' do
+      subject { matrix + other_matrix }
+
+      it 'should retain origin matrix' do
+        expect(subject[0, 0]).to eq(1)
+        expect(subject[0, 1]).to eq(1)
+        expect(subject[0, 2]).to eq(1)
+        expect(subject[1, 0]).to eq(1)
+        expect(subject[1, 1]).to eq(1)
+        expect(subject[1, 2]).to eq(1)
+      end
+
+      it 'should add other matrix inside' do
+        expect(subject[0, 3]).to eq(2)
+        expect(subject[0, 4]).to eq(2)
+        expect(subject[1, 3]).to eq(2)
+        expect(subject[1, 4]).to eq(2)
+        expect(subject[2, 3]).to eq(2)
+        expect(subject[2, 4]).to eq(2)
+      end
     end
 
-    it 'should add other matrix inside' do
-      expect(subject[0, 3]).to eq(2)
-      expect(subject[0, 4]).to eq(2)
-      expect(subject[1, 3]).to eq(2)
-      expect(subject[1, 4]).to eq(2)
-      expect(subject[2, 3]).to eq(2)
-      expect(subject[2, 4]).to eq(2)
+    context 'empty matrix' do
+      let(:empty_matrix) { AirplaneSeating::Util::Matrix.new(row_size: 0, col_size: 0) }
+      subject { empty_matrix + other_matrix }
+
+      it 'should add other matrix inside' do
+        expect(subject[0, 0]).to eq(2)
+        expect(subject[0, 1]).to eq(2)
+        expect(subject[1, 0]).to eq(2)
+        expect(subject[1, 1]).to eq(2)
+        expect(subject[2, 0]).to eq(2)
+        expect(subject[2, 1]).to eq(2)
+      end
     end
   end
 
@@ -62,7 +80,7 @@ describe AirplaneSeating::Util::Matrix do
   end
 
   describe '#column' do
-    let(:matrix) { AirplaneSeating::Util::Matrix.new(2, 3) { rand } }
+    let(:matrix) { AirplaneSeating::Util::Matrix.new(row_size: 2, col_size: 3) { rand } }
     subject { matrix.column(0) }
 
     it 'should get column values' do

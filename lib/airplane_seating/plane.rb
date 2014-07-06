@@ -5,9 +5,9 @@ module AirplaneSeating
   class Plane
 
     def initialize(plane_seats)
-      @seats = create_buckets(plane_seats).reduce(Util::Matrix.new(0, 0)) do |meta, bucket|
-        meta + bucket.seats
-      end
+      @seats = create_buckets(plane_seats).reduce(Bucket.new(0, 0)) do |meta, bucket|
+        meta + bucket
+      end.seats
     end
 
     def create_buckets(plane_seats)
