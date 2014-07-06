@@ -1,4 +1,4 @@
-require 'matrix'
+require 'airplane_seating/util/matrix'
 require 'airplane_seating/seat'
 
 module AirplaneSeating
@@ -13,7 +13,7 @@ module AirplaneSeating
       @index = options[:index]
       @row = options[:row]
       @col = options[:col]
-      @seats = Matrix.build(options[:row], options[:col]) { Seat.new }
+      @seats = AirplaneSeating::Util::Matrix.new(options[:row], options[:col]) { Seat.new }
       set_default_priorities
     end
 
