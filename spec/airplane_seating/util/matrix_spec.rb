@@ -88,4 +88,48 @@ describe AirplaneSeating::Util::Matrix do
       expect(subject[1]).to eq(matrix[1, 0])
     end
   end
+
+  describe '#[]=' do
+    subject {
+      matrix[0, 0] = 100
+      matrix
+    }
+    it 'should set corresponding value' do
+      expect(subject[0, 0]).to eq(100)
+    end
+  end
+
+  describe '#clone' do
+    subject {
+      clone_matrix = matrix.clone
+      clone_matrix[0, 0] = nil
+      clone_matrix
+    }
+    it 'should not effect origin matrix' do
+      expect(matrix[0, 0]).to eq(1)
+    end
+
+    it 'should set clone matrix' do
+      expect(subject[0, 0]).to be_nil
+    end
+
+  end
+
+  describe '#to_s' do
+    let(:other_matrix) { AirplaneSeating::Util::Matrix.new(row_size: 3, col_size: 2) { 2 } }
+    subject {
+      even_matrix = matrix + other_matrix
+      even_matrix[1, 1] = nil
+      even_matrix.to_s
+    }
+
+    it { should eq(<<-EOS
+  1  1  1  2  2
+  1     1  2  2
+           2  2
+                EOS
+                ) }
+
+
+  end
 end

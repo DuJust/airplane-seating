@@ -16,15 +16,20 @@ module AirplaneSeating
         @matrix[row][col]
       end
 
+      def []=(row, col, val)
+        @matrix[row][col] = val
+      end
+
       def +(other)
-        return self.class.new(row_size: other.row_size, col_size: col_size, matrix: other.matrix) if @row_size == 0
+        return self.class.new(row_size: other.row_size, col_size: other.col_size, matrix: other.matrix) if @row_size == 0
+        cloned_matrix = @matrix.map { |row| row.clone }
         other.rows.each_with_index do |row, index|
-          @matrix[index] = @matrix[index] + row if @row_size > index
-          @matrix << create_row(other, index) if @row_size <= index
+          cloned_matrix[index] = @matrix[index] + row if @row_size > index
+          cloned_matrix << create_row(other, index) if @row_size <= index
         end
-        @row_size = [@row_size, other.row_size].max
-        @col_size = @col_size + other.col_size
-        self
+        row_size = [@row_size, other.row_size].max
+        col_size = @col_size + other.col_size
+        self.class.new(row_size: row_size, col_size: col_size, matrix: cloned_matrix)
       end
 
       def create_row(other, index)
@@ -45,7 +50,7 @@ module AirplaneSeating
 
       def each(&block)
         @matrix.each do |row|
-          row.each { |element| block.call(element) }
+          row.each { |element| block.call(element) unless element.nil? }
         end
       end
 
@@ -57,6 +62,17 @@ module AirplaneSeating
 
       def each_with_index(*args)
         @matrix.send(:each_with_index, *args)
+      end
+
+      def clone
+        cloned_matrix = @matrix.map { |row| row.clone }
+        self.class.new(row_size: row_size, col_size: col_size, matrix: cloned_matrix)
+      end
+
+      def to_s
+        @matrix.collect do |row|
+          row.collect { |element| element.nil? ? '   ' : sprintf('%3s', element.to_s) }.join + "\n"
+        end.join
       end
     end
   end

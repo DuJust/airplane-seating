@@ -18,19 +18,25 @@ module AirplaneSeating
     end
 
     def passengers(persons)
-      seat_queue = merge_queues
+      seat_queue = priority_queue
+      persons.times { |person| seat_queue.shift.passenger = person + 1 }
+    end
 
-      persons.times do |person|
-        seat = seat_queue.pop
-        seat.set_passager(person)
+    def priority_queue
+      priority_queue = {}
+      @seats.each do |seat|
+        priority_queue[seat.priority] ||= Array.new
+        priority_queue[seat.priority].push seat unless seat.nil?
       end
-
-      print_seats
+      priority_queue[Seat::AISLE] + priority_queue[Seat::WINDOW] + priority_queue[Seat::MIDDLE]
     end
 
     def seat(row, col)
       @seats[row, col]
     end
 
+    def to_s
+      @seats.to_s
+    end
   end
 end

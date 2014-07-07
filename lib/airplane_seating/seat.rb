@@ -3,7 +3,7 @@ require 'matrix'
 module AirplaneSeating
   class Seat
 
-    attr_accessor :priority, :capable
+    attr_accessor :priority, :capable, :passenger
 
     AISLE = 3
     WINDOW = 2
@@ -17,6 +17,10 @@ module AirplaneSeating
 
     def self.create_empty
       new(capable: false)
+    end
+
+    def to_s
+      passenger.to_s
     end
 
   end
