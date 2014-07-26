@@ -1,5 +1,3 @@
-require 'matrix'
-
 module AirplaneSeating
   class Seat
 

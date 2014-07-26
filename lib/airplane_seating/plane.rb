@@ -1,4 +1,3 @@
-require 'airplane_seating/util/matrix'
 require 'airplane_seating/bucket'
 
 module AirplaneSeating
