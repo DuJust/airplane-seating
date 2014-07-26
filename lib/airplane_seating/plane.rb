@@ -17,17 +17,19 @@ module AirplaneSeating
     end
 
     def passengers(persons)
-      passengers_queue = priority_queue
-      persons.times { |person| passengers_queue.shift.passenger = person + 1 }
+      passengers_priority_queue = priority_queue.clone
+      persons.times { |person| passengers_priority_queue.shift.passenger = person + 1 }
     end
 
     def priority_queue
-      priority_queue_hash = {}
-      @seats.each do |seat|
-        priority_queue_hash[seat.priority] ||= Array.new
-        priority_queue_hash[seat.priority].push seat unless seat.nil?
+      @priority_queue ||= begin
+        priority_queue_hash = {}
+        @seats.each do |seat|
+          priority_queue_hash[seat.priority] ||= Array.new
+          priority_queue_hash[seat.priority].push seat unless seat.nil?
+        end
+        priority_queue_hash[Seat::AISLE] + priority_queue_hash[Seat::WINDOW] + priority_queue_hash[Seat::MIDDLE]
       end
-      priority_queue_hash[Seat::AISLE] + priority_queue_hash[Seat::WINDOW] + priority_queue_hash[Seat::MIDDLE]
     end
 
     def seat(row, col)
