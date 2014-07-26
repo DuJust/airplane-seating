@@ -5,30 +5,30 @@ module AirplaneSeating
   class Plane
 
     def initialize(plane_seats)
-      @seats = create_buckets(plane_seats).reduce(Bucket.new(0, 0)) do |meta, bucket|
-        meta + bucket
-      end.seats
+      @seats = create_seats(plane_seats)
     end
 
-    def create_buckets(plane_seats)
-      buckets = plane_seats.map { |bucket| Bucket.new(bucket[1], bucket[0]) }
-      buckets.first.set_left_window_priority
-      buckets.last.set_right_window_priority
-      buckets
+    def create_seats(plane_seat_sizes)
+      bucket = plane_seat_sizes.inject(Bucket.new(row: 0, col: 0)) do |meta, plane_seat_size|
+        meta + Bucket.new(row: plane_seat_size[1], col: plane_seat_size[0])
+      end
+      bucket.set_window_priority_by_column(Bucket::LEFT)
+      bucket.set_window_priority_by_column(Bucket::RIGHT)
+      bucket.seats
     end
 
     def passengers(persons)
-      seat_queue = priority_queue
-      persons.times { |person| seat_queue.shift.passenger = person + 1 }
+      passengers_queue = priority_queue
+      persons.times { |person| passengers_queue.shift.passenger = person + 1 }
     end
 
     def priority_queue
-      priority_queue = {}
+      priority_queue_hash = {}
       @seats.each do |seat|
-        priority_queue[seat.priority] ||= Array.new
-        priority_queue[seat.priority].push seat unless seat.nil?
+        priority_queue_hash[seat.priority] ||= Array.new
+        priority_queue_hash[seat.priority].push seat unless seat.nil?
       end
-      priority_queue[Seat::AISLE] + priority_queue[Seat::WINDOW] + priority_queue[Seat::MIDDLE]
+      priority_queue_hash[Seat::AISLE] + priority_queue_hash[Seat::WINDOW] + priority_queue_hash[Seat::MIDDLE]
     end
 
     def seat(row, col)

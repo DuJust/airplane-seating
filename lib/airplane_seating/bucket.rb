@@ -9,8 +9,8 @@ module AirplaneSeating
 
     attr_accessor :seats
 
-    def initialize(row, col)
-      @seats = AirplaneSeating::Util::Matrix.new(row_size: row, col_size: col) { Seat.new }
+    def initialize(options = {})
+      @seats = Util::Matrix.new(row_size: options[:row], col_size: options[:col]) { Seat.new }
       set_default_priorities
     end
 
@@ -23,13 +23,8 @@ module AirplaneSeating
       @seats[row, col]
     end
 
-    def set_left_window_priority
-      @seats.column(LEFT).each { |seat| seat.priority = Seat::WINDOW }
-    end
-
-
-    def set_right_window_priority
-      @seats.column(RIGHT).each { |seat| seat.priority = Seat::WINDOW }
+    def set_window_priority_by_column(column)
+      @seats.column(column).each { |seat| seat.priority = Seat::WINDOW unless seat.nil? }
     end
 
     private
