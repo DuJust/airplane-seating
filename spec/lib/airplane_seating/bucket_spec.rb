@@ -17,9 +17,9 @@ module AirplaneSeating
       end
     end
 
-    describe '#set_window_priority_by_column' do
+    describe '#set_priority_by_column' do
       subject {
-        bucket.set_window_priority_by_column(Bucket::LEFT)
+        bucket.set_priority_by_column(Bucket::LEFT, Seat::WINDOW)
         bucket
       }
       it 'should set all left side to window priority' do

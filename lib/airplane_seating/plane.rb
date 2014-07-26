@@ -12,8 +12,8 @@ module AirplaneSeating
       bucket = plane_seat_sizes.inject(Bucket.new(row: 0, col: 0)) do |meta, plane_seat_size|
         meta + Bucket.new(row: plane_seat_size[1], col: plane_seat_size[0])
       end
-      bucket.set_window_priority_by_column(Bucket::LEFT)
-      bucket.set_window_priority_by_column(Bucket::RIGHT)
+      bucket.set_priority_by_column(Bucket::LEFT, Seat::WINDOW)
+      bucket.set_priority_by_column(Bucket::RIGHT, Seat::WINDOW)
       bucket.seats
     end
 
